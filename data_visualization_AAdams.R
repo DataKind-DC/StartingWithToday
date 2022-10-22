@@ -4,12 +4,13 @@
 #Organization: Starting With Today
 #Volunteer: Alex Adams (thisismyusername11199@gmail.com)
 
-#---- Packages
+# Packages ----
 require(dplyr)
 require(ggplot2)
-#---- Read in Data
+
+# Read in Data ----
 years <-
-  c(2014:2021)
+  c(2014:2020)
 
 data <-
   data.frame()
@@ -35,7 +36,7 @@ for (year in years){
 
 rm(df)
 
-#Read in workshop categories
+# Read in workshop categories ----
 categories <-
   readxl::read_xlsx(
     'Workshop Categories.xlsx',
@@ -49,9 +50,9 @@ data <-
     by = 'Workshop'
   )
 
-#----Create some data visualizations
+# Create some data visualizations ----
 
-#Group # of attendees by category/year
+# Group # of attendees by category/year ----
 data %>%
   group_by(
    `Workshop Category`,
@@ -69,12 +70,12 @@ data %>%
   geom_col(position = 'dodge') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
-  ggtitle('Number of Attendees at SWT Workshops by Category, 2014-2021') +
+  ggtitle('Number of Attendees at SWT Workshops by Category, 2014-2020') +
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
 
-#Group by year
+# Group by year ----
 
 data %>%
   group_by(
@@ -88,11 +89,58 @@ data %>%
     aes(
       x = factor(year),
       y = count)) +
-  geom_col(position = 'dodge') +
+  geom_col(position = 'dodge',
+           fill = '#1a8c47') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
-  ggtitle('Number of Attendees at SWT Workshops by Category, 2014-2021') +
+  ggtitle('Number of Attendees at SWT Workshops, 2014-2020') +
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
 
+# Attendees Per Category ----
+
+data %>%
+  group_by(
+    `Workshop Category`
+  ) %>%
+  summarise(
+    count = n()
+  ) %>%
+  ungroup() %>%
+  ggplot(
+    aes(
+      x = factor(`Workshop Category`),
+      y = count)) +
+  geom_col(position = 'dodge',
+           fill = '#af1f27') +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
+  ggtitle('Number of Attendees at SWT Workshops per Category',
+          subtitle = '2014-2020') +
+  ylab('Number of Attendees') +
+  xlab('Workshop Category') +
+  labs(caption = 'Data Provided by Starting With Today')
+
+
+
+data %>%
+  group_by(
+    year
+  ) %>%
+  summarise(
+    count = n()
+  ) %>%
+  ungroup() %>%
+  ggplot(
+    aes(
+      x = factor(year),
+      y = count)) +
+  geom_col(position = 'dodge',
+           fill = '#1a8c47') +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
+  ggtitle('Number of Attendees at SWT Workshops, 2014-2021') +
+  ylab('Number of Attendees') +
+  xlab('Year') +
+  labs(caption = 'Data Provided by Starting With Today')
