@@ -10,7 +10,7 @@ require(ggplot2)
 
 # Read in Data ----
 years <-
-  c(2014:2021)
+  c(2014:2020)
 
 data <-
   data.frame()
@@ -70,7 +70,7 @@ data %>%
   geom_col(position = 'dodge') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
-  ggtitle('Number of Attendees at SWT Workshops by Category, 2014-2021') +
+  ggtitle('Number of Attendees at SWT Workshops by Category, 2014-2020') +
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
@@ -93,7 +93,7 @@ data %>%
            fill = '#1a8c47') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
-  ggtitle('Number of Attendees at SWT Workshops, 2014-2021') +
+  ggtitle('Number of Attendees at SWT Workshops, 2014-2020') +
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
@@ -117,7 +117,30 @@ data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
   ggtitle('Number of Attendees at SWT Workshops per Category',
-          subtitle = '2014-2021') +
+          subtitle = '2014-2020') +
   ylab('Number of Attendees') +
   xlab('Workshop Category') +
+  labs(caption = 'Data Provided by Starting With Today')
+
+
+
+data %>%
+  group_by(
+    year
+  ) %>%
+  summarise(
+    count = n()
+  ) %>%
+  ungroup() %>%
+  ggplot(
+    aes(
+      x = factor(year),
+      y = count)) +
+  geom_col(position = 'dodge',
+           fill = '#1a8c47') +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
+  ggtitle('Number of Attendees at SWT Workshops, 2014-2021') +
+  ylab('Number of Attendees') +
+  xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
