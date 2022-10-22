@@ -32,6 +32,24 @@ for (year in years){
   ) %>%
     mutate(year = year)
   
+  if("Gender:" %in% colnames(df)){
+    df <-
+      df %>%
+      rename('Gender' = `Gender:`)
+  }
+  
+  if("Zip Code:" %in% colnames(df)){
+    df <-
+      df %>%
+      rename('Zip Code' = `Zip Code:`)
+  }
+  
+  if("Age Range (please select one):" %in% colnames(df)){
+    df <-
+      df %>%
+      rename('Age Range' = `Age Range (please select one):`)
+  }
+  
   data <-
     data %>%
     bind_rows(df)
@@ -93,6 +111,76 @@ data %>%
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
 
+#Group data by age range and year
+data %>%
+  group_by(
+    `Age Range`,
+    year
+  ) %>%
+  #Count number of occurrences 
+  summarise(
+    count = n()
+  ) %>%
+  #Ungroup
+  ungroup() %>%
+  #Pipe data into bar chart
+  ggplot(
+    aes(
+      x = factor(year),
+      y = count,
+      fill = `Age Range`)) +
+  geom_col(position = 'dodge',
+           color = 'black') +
+  theme_bw() +
+  #Fill colors with official SWT colors
+  # scale_fill_manual(values = c('#af1f27',
+  #                              '#f1e21f',
+  #                              '#1a8c47')) +
+  #Make sure all labels are present
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
+  #Add plot title and axis labels
+  ggtitle('Number of Attendees at SWT Workshops by Age Range, 2014-2020') +
+  ylab('Number of Attendees') +
+  xlab('Year') +
+  labs(caption = 'Data Provided by Starting With Today')
+
+
+#Group data by workshop category and year
+data %>%
+  mutate(Gender = case_when(Gender == 'sistagirl' ~ 'Female',
+                            Gender != 'sistagirl' ~ Gender)) %>%
+  filter(year != 2014) %>%
+  group_by(
+    Gender,
+    year
+  ) %>%
+  #Count number of occurrences 
+  summarise(
+    count = n()
+  ) %>%
+  #Ungroup
+  ungroup() %>%
+  #Pipe data into bar chart
+  ggplot(
+    aes(
+      x = factor(year),
+      y = count,
+      fill = Gender)) +
+  geom_col(position = 'dodge') +
+  theme_bw() +
+  #Fill colors with official SWT colors
+  scale_fill_manual(values = c('#af1f27',
+                               '#f1e21f',
+                               '#1a8c47')) +
+  #Make sure all labels are present
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
+  #Add plot title and axis labels
+  ggtitle('Number of Attendees at SWT Workshops by Gender, 2015-2020') +
+  ylab('Number of Attendees') +
+  xlab('Year') +
+  labs(caption = 'Data Provided by Starting With Today')
+
+
 # Group by year ----
 
 data %>%
@@ -140,3 +228,11 @@ data %>%
   xlab('Workshop Category') +
   labs(caption = 'Data Provided by Starting With Today')
 
+
+# Group by gender/year ------------------------------------------------
+
+View(data %>%
+       group_by(year,
+                `Gender:`) %>%
+       summarise(count = n()) %>%
+       ungroup())
