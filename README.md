@@ -1,6 +1,6 @@
-# <center> StartingWithToday
+# StartingWithToday
 
-Starting With Today (SWT) is a non-profit organization in Washington, DC, whose [mission](https://www.startingwithtoday.org/) is to: "To create, sustain, and enhance professional, mental, and financial wellness by providing customized training and resources to underserved adults."
+`Starting With Today (SWT)` is a non-profit organization in Washington, DC, whose [mission](https://www.startingwithtoday.org/) is to: "To create, sustain, and enhance professional, mental, and financial wellness by providing customized training and resources to underserved adults."
 
 SWT has collected data on participants' attendance to workshops in health and wellbeing, financial wellbeing, and career-related topics since 2014. The goals of this project are to:
 
