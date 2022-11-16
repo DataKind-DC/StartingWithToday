@@ -5,6 +5,7 @@ editor: source
 ---
 
 ```{r load_libraries}
+# setwd ("C:/Users/Main/Documents/Work/swt/StartingwithToday")
 
 library(tidyverse)
 library(readxl)
@@ -19,19 +20,22 @@ library(labelled)
 
 ```{r load_datasets}
 files_xlsx <- c("swt_2014_raw.xlsx", "swt_2014_raw.xlsx",
-                "swt_2015_raw.xlsx", "swt_2016_raw.xlsx")#, "swt_2017_raw.xlsx")
+                "swt_2015_raw.xlsx", "swt_2016_raw.xlsx", "swt_2017_raw.xlsx",
+                "swt_2018_raw.xlsx", "swt_2019_raw.xlsx", "swt_2020_raw.xlsx")#, "swt_2021_raw.xlsx")
 
 sheets_names <- c("Intake Forms", "Post Workshop Surveys",
-                  "Master List", "2016")#, "Sheet1")
+                  "Master List", "2016", "Sheet1", 
+                  "2018 w Gen Info Forms", "In-Person w Gen Intake Forms", "In-person w Gen Intake Forms") # note that R ignores / in sheet names
 
-ranges <- c("A:H", "A:D", "A:K", "A:M", "A:M")
+ranges <- c("A:H", "A:D", "A:K", rep ("A:M",5))
 
 seed_names <- c("2014_preworkshop","2014_postworkshop",
-               "2015_preworkshop", "2016_preworkshop")#, "2017_preworkshop")
+               "2015_preworkshop", "2016_preworkshop", "2017_preworkshop",
+               "2018_preworkshop", "2019_preworkshop", "2020_preworkshop")
 
 for (i in seq(length(files_xlsx))) {
-  source_file<- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
-                        #getwd(),
+  source_file<- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
+                        getwd(),
                          "Data", "raw data",
                         #"Data",
                          files_xlsx[i])
@@ -48,6 +52,8 @@ for (i in seq(length(files_xlsx))) {
 ```{r check_imported_dataset}
 #sanity check
 glimpse(swt_2016_preworkshop)
+glimpse(swt_2019_preworkshop)
+
 ```
 
 ## Modify if needed
@@ -57,6 +63,18 @@ glimpse(swt_2016_preworkshop)
 swt_2016_preworkshop <- swt_2016_preworkshop %>% 
   rename(`Interested in receiving more information` = 
            `Would you be interested in receiving more information about our services?`)
+swt_2017_preworkshop <- swt_2017_preworkshop %>% 
+  rename(`Interested in receiving more information` = 
+           `Would you be interested in receiving more information about our services?`)
+swt_2018_preworkshop <- swt_2018_preworkshop %>% 
+  rename(`Interested in receiving more information` = 
+           `Would you be interested in receiving more information about our services?`)
+swt_2019_preworkshop <- swt_2019_preworkshop %>% 
+  rename(`Interested in receiving more information` = 
+           `Would you be interested in receiving more information about our services?`)
+swt_2020_preworkshop <- swt_2020_preworkshop %>% 
+  rename(`Interested in receiving more information` = 
+           `Would you be interested in receiving more information about our services?`)
 ```
 
 ## Export
@@ -64,14 +82,18 @@ swt_2016_preworkshop <- swt_2016_preworkshop %>%
 ```{r export_to_csv}
 
 files_csv <- c("swt_2014_processed_pre.csv","swt_2014_processed_post.csv",
-               "swt_2015_processed_pre.csv", "swt_2016_processed_pre.csv")
+               "swt_2015_processed_pre.csv", "swt_2016_processed_pre.csv",
+               "swt_2017_processed_pre.csv", "swt_2018_processed_pre.csv",
+               "swt_2019_processed_pre.csv", "swt_2020_processed_pre.csv")
 
 swt_dfs <- c("swt_2014_preworkshop","swt_2014_postworkshop",
-               "swt_2015_preworkshop", "swt_2016_preworkshop")
+               "swt_2015_preworkshop", "swt_2016_preworkshop",
+             "swt_2017_preworkshop", "swt_2019_preworkshop",
+             "swt_2018_preworkshop", "swt_2020_preworkshop")
 
 for (i in seq(length(swt_dfs))) {
-  target_file <- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
-                        #getwd(),
+  target_file <- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
+                        getwd(),
                          "data", files_csv[i])
   write_csv(get(swt_dfs[i]), target_file)
 }
@@ -170,8 +192,8 @@ dict_csv <- c("ddict_swt_2014_pre.csv","ddict_swt_2014_post.csv",
                "ddict_swt_2015_pre.csv", "ddict_swt_2016_pre.csv")
 
 for (i in seq(length(dict_list))) {
-  target_file <- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
-                        #getwd(),
+  target_file <- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
+                        getwd(),
                          "data", dict_csv[i])
   write_csv(get(dict_list[i]), target_file)
 }
