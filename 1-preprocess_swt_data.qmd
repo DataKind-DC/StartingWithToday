@@ -69,12 +69,15 @@ swt_2017_preworkshop <- swt_2017_preworkshop %>%
 swt_2018_preworkshop <- swt_2018_preworkshop %>% 
   rename(`Interested in receiving more information` = 
            `Would you be interested in receiving more information about our services?`)
+  rename ("Location" = "Location if different than partner" )
 swt_2019_preworkshop <- swt_2019_preworkshop %>% 
   rename(`Interested in receiving more information` = 
            `Would you be interested in receiving more information about our services?`)
+  rename ("Location" = "Location if different than partner" )
 swt_2020_preworkshop <- swt_2020_preworkshop %>% 
   rename(`Interested in receiving more information` = 
-           `Would you be interested in receiving more information about our services?`)
+           `Would you be interested in receiving more information about our services?`) %>%
+  rename ("Location" = "Location if different than partner" )
 ```
 
 ## Export
