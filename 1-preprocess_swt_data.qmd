@@ -34,8 +34,8 @@ seed_names <- c("2014_preworkshop","2014_postworkshop",
                "2018_preworkshop", "2019_preworkshop", "2020_preworkshop")
 
 for (i in seq(length(files_xlsx))) {
-  source_file<- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
-                        getwd(),
+  source_file<- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
+                        #getwd(),
                          "Data", "raw data",
                         #"Data",
                          files_xlsx[i])
@@ -95,8 +95,8 @@ swt_dfs <- c("swt_2014_preworkshop","swt_2014_postworkshop",
              "swt_2018_preworkshop", "swt_2020_preworkshop")
 
 for (i in seq(length(swt_dfs))) {
-  target_file <- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
-                        getwd(),
+  target_file <- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
+                        #getwd(),
                          "data", files_csv[i])
   write_csv(get(swt_dfs[i]), target_file)
 }
@@ -195,8 +195,8 @@ dict_csv <- c("ddict_swt_2014_pre.csv","ddict_swt_2014_post.csv",
                "ddict_swt_2015_pre.csv", "ddict_swt_2016_pre.csv")
 
 for (i in seq(length(dict_list))) {
-  target_file <- file.path(#rprojroot::find_root(rprojroot::is_rstudio_project),
-                        getwd(),
+  target_file <- file.path(rprojroot::find_root(rprojroot::is_rstudio_project),
+                        #getwd(),
                          "data", dict_csv[i])
   write_csv(get(dict_list[i]), target_file)
 }
