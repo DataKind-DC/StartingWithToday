@@ -1,10 +1,10 @@
-
 #DataKind DC Hackathon @Georgetown University
 #Date: October 22, 2022
 #Organization: Starting With Today
 #Volunteer: Alex Adams (thisismyusername11199@gmail.com)
 
 # Packages ----
+# require (tidymodels)
 require(dplyr)
 require(ggplot2)
 
@@ -18,12 +18,16 @@ data <-
   data.frame()
 
 #Loop over years, read in data
+setwd("~/Work/swt/StartingwithToday")
 for (year in years){
   filename <-
     paste0(
-      'raw data/',
+      getwd(),
+      '/Data/raw data/',
+      'swt_',
       as.character(year),
-      '_attend.xlsx'
+      '_raw.xlsx'
+      #'_attend.xlsx'
     )
   df <-
     readxl::read_excel(
@@ -63,7 +67,7 @@ rm(df)
 #Load in workshop categories
 categories <-
   readxl::read_xlsx(
-    'Workshop Categories.xlsx',
+    './Data/raw data/Workshop Categories.xlsx',
     sheet = 'Workshop names'
   )
 
@@ -233,6 +237,9 @@ data %>%
 
 View(data %>%
        group_by(year,
-                `Gender:`) %>%
+                `Gender`) %>%
        summarise(count = n()) %>%
        ungroup())
+
+write.csv (data, file = "swt_alldata.csv")
+#getwd()
