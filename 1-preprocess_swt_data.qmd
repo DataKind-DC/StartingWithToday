@@ -13,10 +13,10 @@ library(labelled)
 ```
 
 ## Load datasets
-# files renamed beforehand::
-#  "swt_2014_raw.xlsx" was "2014- Copy of De-identified v1- SWT Data and Evaluation.xlsx"
+# files renamed beforehand:: 
+#  "swt_2014_raw.xlsx" was "2014- Copy of De-identified v1- SWT Data and Evaluation.xlsx"  
 # "swt_2015_raw.xlsx" was "2015-Copy of De-Identified v1 SWT 2015 Data - General Information Forms.xlsx"
-# "swt_2016_raw.xlsx" was "2016 Copy of De-Identified v1- 2016 Data- Master List.xlsx"
+# "swt_2016_raw.xlsx" was "2016 Copy of De-Identified v1- 2016 Data- Master List.xlsx" same for 2017 on to 2020
 
 ```{r load_datasets}
 files_xlsx <- c("swt_2014_raw.xlsx", "swt_2014_raw.xlsx",
