@@ -4,7 +4,7 @@ from dash.exceptions import PreventUpdate
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import json
+import json 
 
 app = Dash(__name__)
 
