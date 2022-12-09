@@ -51,7 +51,8 @@ fig_score = px.choropleth(needs_score,
                     center={'lat':38.8938005,'lon':-77.1579293},
                     hover_data=['% pop below poverty line', 'Depression rate',
                                 '% of households without health insurance', 'Gini index',
-                                '% of households without vehicles'],
+                                '% of households without vehicles',
+                                'Zip Code'],
                     fitbounds="locations")
 fig_score.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='Needs Score')
 
@@ -64,10 +65,30 @@ fig_race = px.choropleth(needs_score,
                     featureidkey="properties.GEOID",
                     scope="usa",
                     center={'lat':38.8938005,'lon':-77.1579293},
-                    hover_data=['% Black residents'],
+                    hover_data=['% Black residents','Zip Code'],
                     fitbounds="locations")
 
 fig_race.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='% Black residents')
+
+# Generate data for number of organizations by type of service across DC
+svcs = pd.DataFrame(df.iloc[:,excluded_cols-len(df.columns):].sum())
+svcs.reset_index(inplace=True)
+svcs.rename(columns={'index':'Service',0:'Number of organizations'},inplace=True)
+svcs = svcs.sort_values(by='Number of organizations',ascending=False)
+svcs = svcs[svcs['Number of organizations'] >= 5]
+
+fig_svcs = px.bar(svcs, x="Service", y="Number of organizations")
+
+# Generate data for number of organizations by type of service in Wards 7 and 8
+svcs_wards_7_8 = pd.DataFrame(df[(df['zip'] == '20002') | (df['zip'] == '20003') | (df['zip'] == '20019') | \
+                    (df['zip'] == '20020') | (df['zip'] == '20024') | (df['zip'] == '20373') | \
+                    (df['zip'] == '20032')].iloc[:,excluded_cols-len(df.columns):].sum())
+svcs_wards_7_8.reset_index(inplace=True)
+svcs_wards_7_8.rename(columns={'index':'Service',0:'Number of organizations'},inplace=True)
+svcs_wards_7_8 = svcs_wards_7_8.sort_values(by='Number of organizations',ascending=False)
+svcs_wards_7_8 = svcs_wards_7_8[svcs_wards_7_8['Number of organizations'] >= 5]
+
+fig_svcs_wards_7_8 = px.bar(svcs_wards_7_8, x="Service", y="Number of organizations")
 
 # Create the title of the dashboard
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
@@ -118,7 +139,23 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']}),
             dcc.Graph(
                 id='graph3',
-                figure=fig_race)], className='six columns')
+                figure=fig_race)], className='six columns'),
+    html.Div([
+        html.Div(children='Number of non-profits by type of service in Washington, DC', style={
+            'textAlign': 'center',
+            'color': colors['text'],
+            'font-family': colors['font-family']}),
+            dcc.Graph(
+                id='graph4',
+                figure=fig_svcs)], className='six columns'),
+    html.Div([
+        html.Div(children='Number of non-profits by type of service, Wards 7 and 8', style={
+            'textAlign': 'center',
+            'color': colors['text'],
+            'font-family': colors['font-family']}),
+            dcc.Graph(
+                id='graph5',
+                figure=fig_svcs_wards_7_8)], className='six columns')
     ],className='row')
 
 # Set up the callback that will change the data provided of location of non-profit orgs based on the service types selected
