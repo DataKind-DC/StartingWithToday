@@ -1,19 +1,27 @@
+# Import required libraries
 import webbrowser
 from dash import Dash, dcc, html, Input, Output
 from dash.exceptions import PreventUpdate
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import json 
+import json
+import requests
 
-app = Dash(__name__)
+# Use CSS style sheets
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+app = Dash(__name__, external_stylesheets=external_stylesheets)
+
+# Ingest data of location of non-profit organizations
 df = pd.read_csv('../StartingWithToday/data/non-profit-orgs-cleaned.csv')
 
+# Create list of columns that will be excluded from data frame used to locate organizations on the map
 df.rename(columns={'website':'Website:'},inplace=True)
 excluded_cols = len(['org_url', 'name', 'location', 'website', 'about', 'services',
                      'org_type', 'lat', 'lng', 'zip'])
 
+# Determine styling parameters
 colors = {
     'background': '#111111',
     'text': '#7FDBFF',
@@ -21,8 +29,47 @@ colors = {
     'font-weight': 'bold'
 }
 
+# Create a list of possible services provided by non-profits in the region
 services = list(df.iloc[:,excluded_cols-len(df.columns):].sum().index)
 
+# Ingest the data of the needs score generated in script 3.4
+needs_score = pd.read_csv('../StartingWithToday/data/needs_score.csv')
+
+# Access the geo-JSON file of DC census tracts
+req = requests.get('https://raw.githubusercontent.com/arcee123/GIS_GEOJSON_CENSUS_TRACTS/master/11.geojson')
+
+json = req.json()
+
+# Create a choropleth map of the needs score
+fig_score = px.choropleth(needs_score,
+                    geojson=json,
+                    locations='GEOID',
+                    color='Needs Score',
+                    color_continuous_scale="YlOrRd",
+                    featureidkey="properties.GEOID",
+                    scope="usa",
+                    center={'lat':38.8938005,'lon':-77.1579293},
+                    hover_data=['% pop below poverty line', 'Depression rate',
+                                '% of households without health insurance', 'Gini index',
+                                '% of households without vehicles'],
+                    fitbounds="locations")
+fig_score.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='Needs Score')
+
+# Create another map of the race feature.
+fig_race = px.choropleth(needs_score,
+                    geojson=json,
+                    locations='GEOID',
+                    color='% Black residents',
+                    color_continuous_scale="Blues",
+                    featureidkey="properties.GEOID",
+                    scope="usa",
+                    center={'lat':38.8938005,'lon':-77.1579293},
+                    hover_data=['% Black residents'],
+                    fitbounds="locations")
+
+fig_race.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='% Black residents')
+
+# Create the title of the dashboard
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
         children='StartingWithToday Business Intelligence Dashboard',
@@ -32,7 +79,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']
         }
     ),
-
+    # Create the subtitle of the dashboard
     html.Div(children='Strategic partners, community needs, and demographics', style={
         'textAlign': 'center',
         'color': colors['text'],
@@ -40,6 +87,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     }),
 
     html.Div([
+    # Add the dropdown of service type
         html.Div([
             html.Div([
                 dcc.Dropdown(
@@ -48,13 +96,32 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
                     id='types-of-service',
                     multi=True
                 ),
-            ], style={'width': '26.5%','display':'inline-block','font-family': colors['font-family'],
-                      'font-weight': colors['font-weight']})
-        ]),
+            ], style={'width': '100%','display':'inline-block','font-family': colors['font-family'],
+                      'font-weight': colors['font-weight']})]),
+        # Add the non-profit map graph
         dcc.Graph(id='non-profit-map'),
-        html.Pre(id='data')
-    ])
-])
+        html.Pre(id='data')],className='six columns'),
+    # Add the needs score graph
+    html.Div([
+        html.Div(children='Needs Score: 0 represents lowest need, 100 highest need', style={
+            'textAlign': 'center',
+            'color': colors['text'],
+            'font-family': colors['font-family']}),
+            dcc.Graph(
+                id='graph2',
+                figure=fig_score)], className='six columns'),
+    # Add the graph for the race feature
+    html.Div([
+        html.Div(children='Percentage of residents who are Black (Not-Hispanic/Latino)', style={
+            'textAlign': 'center',
+            'color': colors['text'],
+            'font-family': colors['font-family']}),
+            dcc.Graph(
+                id='graph3',
+                figure=fig_race)], className='six columns')
+    ],className='row')
+
+# Set up the callback that will change the data provided of location of non-profit orgs based on the service types selected
 @app.callback(
     Output('non-profit-map','figure'),
     Input('types-of-service','value'))
@@ -75,7 +142,7 @@ def update_graph(service):
                             color='Service Areas:',
                             zoom=9.7,
                             height=500,
-                            width=501)
+                            width=901)
 
     fig.update_layout(mapbox_style="open-street-map",
         legend=dict(orientation="h"))
@@ -88,6 +155,7 @@ def update_graph(service):
 
     return fig
 
+# Add the callback to allow clicking on a non-profit org data point and opening the hyperlink to the website
 @app.callback(
     Output('data', 'children'),
     Input('non-profit-map', 'clickData'))
@@ -96,7 +164,6 @@ def open_url(clickData):
        webbrowser.open(clickData["points"][0]["customdata"][0])
    else:
       raise PreventUpdate
-      # return json.dumps(clickData, indent=2)
 
 if __name__ == '__main__':
     app.run_server(debug=True, host = '127.0.0.1')
