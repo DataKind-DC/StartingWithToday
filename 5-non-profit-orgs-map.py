@@ -52,7 +52,7 @@ fig_score = px.choropleth(needs_score,
                     hover_data=['% pop below poverty line', 'Depression rate',
                                 '% of households without health insurance', 'Gini index',
                                 '% of households without vehicles',
-                                'Zip Code'],
+                                'Zip Code','Ward'],
                     fitbounds="locations")
 fig_score.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='Needs Score')
 
@@ -65,7 +65,7 @@ fig_race = px.choropleth(needs_score,
                     featureidkey="properties.GEOID",
                     scope="usa",
                     center={'lat':38.8938005,'lon':-77.1579293},
-                    hover_data=['% Black residents','Zip Code'],
+                    hover_data=['% Black residents','Zip Code','Ward'],
                     fitbounds="locations")
 
 fig_race.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='% Black residents')
