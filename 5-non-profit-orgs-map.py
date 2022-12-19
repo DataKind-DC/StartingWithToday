@@ -53,8 +53,9 @@ fig_score = px.choropleth(needs_score,
                                 '% of households without health insurance', 'Gini index',
                                 '% of households without vehicles',
                                 'Zip Code','Ward'],
-                    fitbounds="locations")
-fig_score.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='Needs Score')
+                    fitbounds="locations",
+                    width=600,height=600)
+fig_score.update_layout(autosize=True,margin=dict(l=50,r=50,b=100,t=120,pad=4),paper_bgcolor="#111111")
 
 # Create another map of the race feature.
 fig_race = px.choropleth(needs_score,
@@ -66,9 +67,9 @@ fig_race = px.choropleth(needs_score,
                     scope="usa",
                     center={'lat':38.8938005,'lon':-77.1579293},
                     hover_data=['% Black residents','Zip Code','Ward'],
-                    fitbounds="locations")
-
-fig_race.update_layout(margin={"r":0,"t":0,"l":0,"b":0},title_text='% Black residents')
+                    fitbounds="locations",
+                    width=600,height=600)
+fig_race.update_layout(autosize=True,margin=dict(l=50,r=50,b=100,t=120,pad=4),paper_bgcolor="#111111")
 
 # Generate data for number of organizations by type of service across DC
 svcs = pd.DataFrame(df.iloc[:,excluded_cols-len(df.columns):].sum())
@@ -78,6 +79,7 @@ svcs = svcs.sort_values(by='Number of organizations',ascending=False)
 svcs = svcs[svcs['Number of organizations'] >= 5]
 
 fig_svcs = px.bar(svcs, x="Service", y="Number of organizations")
+fig_svcs.update_layout(autosize=True,margin=dict(l=0,r=0,b=0,t=0,pad=4),paper_bgcolor="#111111")
 
 # Generate data for number of organizations by type of service in Wards 7 and 8
 svcs_wards_7_8 = pd.DataFrame(df[(df['zip'] == '20002') | (df['zip'] == '20003') | (df['zip'] == '20019') | \
@@ -89,6 +91,7 @@ svcs_wards_7_8 = svcs_wards_7_8.sort_values(by='Number of organizations',ascendi
 svcs_wards_7_8 = svcs_wards_7_8[svcs_wards_7_8['Number of organizations'] >= 5]
 
 fig_svcs_wards_7_8 = px.bar(svcs_wards_7_8, x="Service", y="Number of organizations")
+fig_svcs_wards_7_8.update_layout(autosize=True,margin=dict(l=0,r=0,b=0,t=0,pad=4),paper_bgcolor="#111111")
 
 # Create the title of the dashboard
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
@@ -118,10 +121,11 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
                     multi=True
                 ),
             ], style={'width': '100%','display':'inline-block','font-family': colors['font-family'],
-                      'font-weight': colors['font-weight']})]),
+                      'font-weight': colors['font-weight']})])]),
         # Add the non-profit map graph
+    html.Div([
         dcc.Graph(id='non-profit-map'),
-        html.Pre(id='data')],className='six columns'),
+        html.Pre(id='data')]),
     # Add the needs score graph
     html.Div([
         html.Div(children='Needs Score: 0 represents lowest need, 100 highest need', style={
@@ -130,7 +134,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']}),
             dcc.Graph(
                 id='graph2',
-                figure=fig_score)], className='six columns'),
+                figure=fig_score)], style={'display': 'inline-block'}),
     # Add the graph for the race feature
     html.Div([
         html.Div(children='Percentage of residents who are Black (Not-Hispanic/Latino)', style={
@@ -139,7 +143,13 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']}),
             dcc.Graph(
                 id='graph3',
-                figure=fig_race)], className='six columns'),
+                figure=fig_race)], style={'display': 'inline-block'}),
+    # Add a new section for bar plots of the number of organizations by type
+    html.Div(children='The following plots show the distribution of the number of service providers in Washington, DC, and Wards 7 and 8', style={
+        'textAlign': 'center',
+        'color': colors['text'],
+        'font-family': colors['font-family']
+    }),
     html.Div([
         html.Div(children='Number of non-profits by type of service in Washington, DC', style={
             'textAlign': 'center',
@@ -147,7 +157,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']}),
             dcc.Graph(
                 id='graph4',
-                figure=fig_svcs)], className='six columns'),
+                figure=fig_svcs)], style={'display': 'inline-block'}),
     html.Div([
         html.Div(children='Number of non-profits by type of service, Wards 7 and 8', style={
             'textAlign': 'center',
@@ -155,8 +165,8 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'font-family': colors['font-family']}),
             dcc.Graph(
                 id='graph5',
-                figure=fig_svcs_wards_7_8)], className='six columns')
-    ],className='row')
+                figure=fig_svcs_wards_7_8)], style={'display': 'inline-block'})
+])
 
 # Set up the callback that will change the data provided of location of non-profit orgs based on the service types selected
 @app.callback(
@@ -177,9 +187,8 @@ def update_graph(service):
                             hover_name="name",
                             hover_data={"Website:":True,'lat':False,'lng':False},
                             color='Service Areas:',
-                            zoom=9.7,
-                            height=500,
-                            width=901)
+                            zoom=11,
+                            height=600)
 
     fig.update_layout(mapbox_style="open-street-map",
         legend=dict(orientation="h"))
