@@ -19,7 +19,7 @@ data <-
   data.frame()
 
 #Loop over years, read in data
-setwd("~/Work/swt/StartingwithToday")
+setwd("./StartingWithToday/")
 for (year in years){
   filename <-
     paste0(
@@ -139,7 +139,7 @@ data <-
 
 # Create some data visualizations ----
 
-# Group # of attendees by category/year ----
+# Group # of attendees by category/year ---- 
 
 #Group data by workshop category and year
 data %>%
@@ -173,6 +173,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Category, 2014-2020.png')
 
 #Group data by age range and year
 data %>%
@@ -206,6 +207,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Age Range, 2014-2020.png')
 
 
 #Group data by workshop category and year
@@ -242,7 +244,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
-
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Gender, 2015-2020.png')
 
 # Group by year ----
 
@@ -266,6 +268,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops, 2014-2020.png')
 
 # Attendees Per Category ----
 
@@ -290,6 +293,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Workshop Category') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops per Category.png')
 
 
 # Group by gender/year ------------------------------------------------
