@@ -14,7 +14,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 # Ingest data of location of non-profit organizations
-df = pd.read_csv('../StartingWithToday/data/non-profit-orgs-cleaned.csv')
+df = pd.read_csv('https://startingwithtoday.s3.amazonaws.com/non-profit-orgs-cleaned.csv')
 
 # Create list of columns that will be excluded from data frame used to locate organizations on the map
 df.rename(columns={'website':'Website:'},inplace=True)
@@ -33,7 +33,7 @@ colors = {
 services = list(df.iloc[:,excluded_cols-len(df.columns):].sum().index)
 
 # Ingest the data of the needs score generated in script 3.4
-needs_score = pd.read_csv('../StartingWithToday/data/needs_score.csv')
+needs_score = pd.read_csv('https://startingwithtoday.s3.amazonaws.com/needs_score.csv')
 
 # Access the geo-JSON file of DC census tracts
 req = requests.get('https://raw.githubusercontent.com/arcee123/GIS_GEOJSON_CENSUS_TRACTS/master/11.geojson')
@@ -52,7 +52,10 @@ fig_score = px.choropleth(needs_score,
                     hover_data=['% pop below poverty line', 'Depression rate',
                                 '% of households without health insurance', 'Gini index',
                                 '% of households without vehicles',
-                                'Zip Code','Ward'],
+                                'Gap in the % of residents with internet access',
+                                'Gap in the % of residents with a high school diploma',
+                                'Zip Code',
+                                'Ward'],
                     fitbounds="locations",
                     width=600,height=600)
 fig_score.update_layout(autosize=True,margin=dict(l=50,r=50,b=100,t=120,pad=4),paper_bgcolor="#111111")
