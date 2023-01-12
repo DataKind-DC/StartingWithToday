@@ -18,7 +18,8 @@ years <-
 data <-
   data.frame()
 
-#Loop over years, read in data
+#Loop over years, read in data 
+#setwd ("C:/Users/Public/Documents/Work/StartingWithToday/")
 setwd("./StartingWithToday/")
 for (year in years){
   filename <-
@@ -64,7 +65,7 @@ for (year in years){
 rm(df)
 
 ### Load other data, Dec 11 2022 GH
-years_online = 2019:2020
+years_online = 2018:2020
 for (year in years_online){
   filename <-
     paste0(
@@ -76,7 +77,16 @@ for (year in years_online){
       #'_attend.xlsx'
     )
   ### QUICK FIX THERE ARE ONLY TWO
-  if (year == 2019) {
+  if (year %in% c(2018)) {
+    df <-
+      readxl::read_excel(
+        filename,
+        col_types = 'text',
+        sheet = 'Online & Community Events '
+      ) %>%
+      mutate(year = year)
+  }
+  else if (year %in% c(2019)) {
     df <-
       readxl::read_excel(
         filename,
