@@ -4,7 +4,8 @@
 #Volunteer: Alex Adams (thisismyusername11199@gmail.com)
 
 # Packages ----
-# require (tidymodels)
+require (tidyverse)
+require (lubridate)
 require(dplyr)
 require(ggplot2)
 
@@ -18,7 +19,7 @@ data <-
   data.frame()
 
 #Loop over years, read in data
-setwd("~/Work/swt/StartingwithToday")
+setwd("./StartingWithToday/")
 for (year in years){
   filename <-
     paste0(
@@ -34,7 +35,7 @@ for (year in years){
     filename,
     col_types = 'text'
   ) %>%
-    mutate(year = year)
+    mutate(year = year) 
   
   if("Gender:" %in% colnames(df)){
     df <-
@@ -62,6 +63,61 @@ for (year in years){
 #Remove unneeded object
 rm(df)
 
+### Load other data, Dec 11 2022 GH
+years_online = 2019:2020
+for (year in years_online){
+  filename <-
+    paste0(
+      getwd(),
+      '/Data/raw data/',
+      'swt_',
+      as.character(year),
+      '_raw.xlsx'
+      #'_attend.xlsx'
+    )
+  ### QUICK FIX THERE ARE ONLY TWO
+  if (year == 2019) {
+    df <-
+      readxl::read_excel(
+        filename,
+        col_types = 'text',
+        sheet = 'Online & Community Events'
+      ) %>%
+      mutate(year = year)
+  }
+  else {
+    df <- 
+      readxl::read_excel(
+        filename,
+        col_types = 'text',
+        sheet = 'Online & Community events progr'
+      ) %>%
+      mutate(year = year)
+  }
+    
+  # add dummy data for each workshop. maybe a case statement to assign Workshop Category
+  tmp = data
+  df$`In-person` = as.numeric(df$`In-person`)
+  for (i in 1:dim(df)[1]){
+    inpers = df[i,]$`In-person`
+    if (!is.na (inpers)) {
+      for (j in 1:inpers) {
+        wsdate = as.Date(as.numeric(df$Date[i]),origin = '1900-01-01')
+        tmp = tmp %>% add_row (Workshop = df$Workshop[i],#paste0(df$Workshop[i]," ",wsdate),
+                               year = year (wsdate)
+                               )
+      }
+    }
+  }
+  
+  # data <-
+  #   data %>%
+  #   tmp
+  data = tmp
+}
+### end new data
+
+
 # Read in workshop categories ----
 
 #Load in workshop categories
@@ -71,6 +127,7 @@ categories <-
     sheet = 'Workshop names'
   )
 
+
 #Join data to categories
 data <-
   data %>%
@@ -79,9 +136,10 @@ data <-
     by = 'Workshop'
   )
 
+
 # Create some data visualizations ----
 
-# Group # of attendees by category/year ----
+# Group # of attendees by category/year ---- 
 
 #Group data by workshop category and year
 data %>%
@@ -106,6 +164,7 @@ data %>%
   #Fill colors with official SWT colors
   scale_fill_manual(values = c('#af1f27',
                                '#f1e21f',
+                               '#56B4E9',
                                '#1a8c47')) +
   #Make sure all labels are present
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5)) +
@@ -114,6 +173,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Category, 2014-2020.png')
 
 #Group data by age range and year
 data %>%
@@ -147,6 +207,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Age Range, 2014-2020.png')
 
 
 #Group data by workshop category and year
@@ -183,7 +244,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
-
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops by Gender, 2015-2020.png')
 
 # Group by year ----
 
@@ -207,6 +268,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Year') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops, 2014-2020.png')
 
 # Attendees Per Category ----
 
@@ -231,6 +293,7 @@ data %>%
   ylab('Number of Attendees') +
   xlab('Workshop Category') +
   labs(caption = 'Data Provided by Starting With Today')
+ggsave (filename = './visualizations/Number of Attendees at SWT Workshops per Category.png')
 
 
 # Group by gender/year ------------------------------------------------
