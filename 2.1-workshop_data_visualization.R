@@ -316,3 +316,5 @@ View(data %>%
 
 write.csv (data, file = "swt_alldata.csv")
 #getwd()
+
+# make a new set of plots, online incl
