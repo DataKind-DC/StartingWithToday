@@ -42,6 +42,9 @@ def depression_data():
     # convert LocationID so that it's a string
     depression_data['LocationID'] = depression_data['LocationID'].astype(str)
 
+    # rename column with value to be the format that the need score file expects
+    depression_data = depression_data.rename({'Data_Value': 'Indicator Rate Value'}, axis='columns')
+
     # sanity check; print lines for status report
     print("Number of census tracts with depression data:", len(depression_data))
     print("Counties pulled for depression data:", depression_data.CountyName.unique())
@@ -151,25 +154,25 @@ def join_and_clean():
     joined_file = joined_file.merge(walkability_df, left_on='LocationID', right_on='location_id', how = 'left')
 
     # clean column names
-    rename_cols = {'LocationID': 'census_tract_id',
-                    'NAME': 'census_tract_name',
-                    'Data_Value': 'depressed_perc',
-                    'NH_Black_alone_PE':'black_non_hisp_perc',
-                    'NH_White_alone_PE':'white_non_hisp_perc',
-                    'Hispanic_PE':'hispanic_latino_perc',
-                    'PRED3_PE':'3_plus_cre_risk_factors_perc',
-                    'Blw_Pov_Lvl_PE':'below_poverty_level_perc',
-                    'No_Health_Ins_PE':'no_health_insurance_perc',
-                    'Male_PE':'male_perc',
-                    'Female_PE':'female_perc',
-                    'GINI_IND_Inequality_E':'income_inequality_gini_index',
-                    'HS_Grad_PE':'hs_grad_perc',
-                    'No_Veh_PE':'households_no_vehicle_perc',
-                    'Broadband_PE':'households_w_internet_perc',
-                    'Median_NatWalkInd':'walkability_score'
-                }
-    clean_joined_file = joined_file.rename(rename_cols, axis='columns')
-    clean_joined_file = clean_joined_file[rename_cols.values()]
+    # cols_to_keep = {'LocationID': 'geoid_tract_20',
+    #                 'NAME': 'census_tract_name',
+    #                 'Data_Value': 'depressed_perc',
+    #                 'NH_Black_alone_PE':'black_non_hisp_perc',
+    #                 'NH_White_alone_PE':'white_non_hisp_perc',
+    #                 'Hispanic_PE':'hispanic_latino_perc',
+    #                 'PRED3_PE':'3_plus_cre_risk_factors_perc',
+    #                 'Blw_Pov_Lvl_PE':'below_poverty_level_perc',
+    #                 'No_Health_Ins_PE':'no_health_insurance_perc',
+    #                 'Male_PE':'male_perc',
+    #                 'Female_PE':'female_perc',
+    #                 'GINI_IND_Inequality_E':'income_inequality_gini_index',
+    #                 'HS_Grad_PE':'hs_grad_perc',
+    #                 'No_Veh_PE':'households_no_vehicle_perc',
+    #                 'Broadband_PE':'households_w_internet_perc',
+    #                 'Median_NatWalkInd':'walkability_score'
+    #             }
+    clean_joined_file = joined_file.rename({'LocationID' : 'Location'}, axis='columns')
+    # clean_joined_file = clean_joined_file[rename_cols.values()]
 
     # write file and provide instructions
     clean_joined_file.to_csv(os.path.join(data_folder, 'joined_depression_cre_walkability.csv'), index=False)
