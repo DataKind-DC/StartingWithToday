@@ -1,3 +1,4 @@
+# NOTE THAT THIS FILE IS OBSOLETE. Please use 2.1-workshop_data_visualization.R for data processing
 ---
 title: "Preprocess SWT Raw Data 1"
 format: html
@@ -5,7 +6,6 @@ editor: source
 ---
 
 ```{r load_libraries}
-# setwd ("C:/Users/Main/Documents/Work/swt/StartingwithToday")
 
 library(tidyverse)
 library(readxl)
