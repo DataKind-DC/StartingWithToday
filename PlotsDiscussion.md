@@ -1,6 +1,6 @@
 # StartingWithToday
 
-Plots for Community and Online Events for discussion January 30, 2023. Compare plot 1 to 2+3, also 5 vs 6+7. Color schemes etc can be discussed too.
+Plots for Community and Online Events for discussion January 30, 2023. Compare plot 1 to 2+3, also 5 vs 6+7. Color schemes etc open to discussion too.
 
 5. Compare just 5 vs 6 and 7
 <p align="center">
