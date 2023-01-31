@@ -16,12 +16,9 @@ This project is organized in the following way:
 * `1-preprocess_swt_data.qmd`: cleans the raw data and generates new files for use in the analysis
 * `2.1-workshop_data_visualization.R`: produces counts of participants served by year, age group, and workshop type
 * `2.2-feedback_analysis.ipynb`: produces the count of participants by gender and an average of workshop satisfaction ratings.
-* `3.1-census_poverty_data.ipynb`: extracts data poverty rates by race from the 2020 Census by census tract.
-* `3.2-unemployment-rate-data.ipynb`: extracts data of the unemployment rate from the 2020 Census by census block.
-* `3.3-mental_health_data.ipynb`: extracts data of depression rates by census block from the Center for Disease Control.
-* `3.4-exploratory_data_analysis.ipynb`: produces EDA of Census CRE equity supplement and CDC data on depression rates
-* `create_data_file.py`: generates a data set of community needs including poverty levels, depression rates, percent of the population that is uninsured and more by census tract in Washington, DC, and Prince George's County.
-* `3.5-needs-score.ipynb:` ingests the data from notebook 3.4 and computes z-scores of all community needs attributes to create a composite `Needs Score`; exports the data used to visualize the needs score and other data.
+* `3.1-create_data_file.py`: generates a data set of community needs including poverty levels, depression rates, percent of the population that is uninsured and more by census tract in Washington, DC, and Prince George's County.
+* `3.2-exploratory_data_analysis.ipynb`: produces EDA of Census CRE equity supplement and CDC data on depression rates
+* `3.3-needs-score.ipynb:` ingests the data from notebook 3.4 and computes z-scores of all community needs attributes to create a composite `Needs Score`; exports the data used to visualize the needs score and other data.
 * `4.1-web-scrapping-and-data-collection.ipynb`: extracts data of 1,000 non-profit organizations listed in [idealist.org](https://www.idealist.org/en/organizations?q=)
 * `4.2-non_profit_orgs_data_cleaning_and_analysis.ipynb & 4.3-web-scrapped-data-plotting.ipynb`: clean the data extracted in script 4.1 for display in an online dashboard.
 * `5-non-profit-orgs-map`: generates online dashboard using data generated from script 3.5.
@@ -29,7 +26,27 @@ This project is organized in the following way:
 ## Data:
 
 * Community Resilience Estimates Equity Supplement:
+  * Source: [U.S. Census Bureau](https://www.census.gov/programs-surveys/community-resilience-estimates/data/supplement.html)
+  * Description: This data set contains different columns indicating risk factors that might impact the community resilience of a certain area, including education rates, poverty rates, access to internet, etc.
+  * How to download:
+    1. Click the link above, scroll down to where you see “Tract”, and then click that link
+    2. When prompted, name the file “cre_equity_census_tract_data.csv” and save in the “raw_data” folder
 * CDC Depression rates:
+  * Source: [Centers for Disease Control & Prevention - PLACES ](https://chronicdata.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-Place-Data-202/eav7-hnsx)
+  * Description: Reports on the percentage of adults living in within a census tract who have self-reported if they have ever been diagnosed with depression
+  * How to download:
+    1. Click the link above, and then click “Export”
+    2. Click “CSV”
+    3. When prompted, name the file “depression_census_tract_data.csv” and save in a folder named “raw_data”
+* Walkability Index Score per Census Block
+  * Source: U.S. Environmental Protection Agency
+  * Description: The Walkability Index dataset characterizes every Census block group in the U.S. based on its relative walkability. Walkability depends upon characteristics of the built environment that influence the likelihood of walking being used as a mode of travel.
+  * How to download:
+    1. Click the link above, scroll down to where you see “Comma Separated Values File”, and click the “Download” button next to it
+    2. When prompted, name the file “walkability_census_block_data.csv” and save in the “raw_data” folder
+
+
+
 * idealist.org: contains information on non-profit organizations' profiles including characteristics such as name, address, and service areas
 
 ## Analysis of administrative data:
@@ -68,6 +85,14 @@ Each of these features is assigned a weight from 0% to 100% for a total composit
 This dashboard is generated through Python script 5-non-profit-orgs-map.py and is deployed to Heroku [here](https://starting-with-today-dashboard.herokuapp.com/). The code used to maintain the app is found in [this](https://git.heroku.com/starting-with-today-dashboard.git) separate Heroku GitHub repository.
 
 ## Data highlights from Census CRE Equity Supplement
+
+![census-tracts-averages](./visualizations/comparing_black_nonblack_census_tracts.png)
+![depression](./visualizations/depression_rates_dc_pg_counties.png)
+![poverty](./visualizations/poverty_rate_distribution.png)
+![health-insurance](./visualizations/no_health_insurance.png)
+![internet](./visualizations/internet.png)
+
+
 
 ### References:
 
