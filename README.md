@@ -1,11 +1,13 @@
 # StartingWithToday
 
-`Starting With Today (SWT)` is a non-profit organization in Washington, DC, whose [mission](https://www.startingwithtoday.org/) is to: "To create, sustain, and enhance professional, mental, and financial wellness by providing customized training and resources to underserved adults."
+`Starting With Today (SWT)` is a non-profit organization in Washington, DC, whose [mission](https://www.startingwithtoday.org/) is: "To create, sustain, and enhance professional, mental, and financial wellness by providing customized training and resources to underserved adults."
 
-SWT has collected data on participants' attendance to workshops in health and wellbeing, financial wellbeing, and career-related topics since 2014. The goals of this project are to:
+SWT partnered with DataKind to analyze data on program participation to its health and financial wellbeing workshops and create an online dashboard to identify census tracts in Washington, DC, region where SWT can expand its services.
 
-* Conduct exploratory data analysis to evaluate year-over-year growth in the number of participants served and the characteristics of workshop participants
-* Identify the geographical areas within Washington, DC, and the surrounding areas in Prince George's County, MD, where SWT could expand its services based on needs and assets of its target population
+**The goals of this project are to**:
+
+* Analyze administrative data to determine the number of clients participating in SWT workshops
+* Visualize the census tracts in Washington, DC, where there is a lack of services available around mental health and financial wellbeing and a high community need for these services based on factors such as poverty levels and depression rates
 
 This project is organized in the following way:
 
@@ -17,45 +19,61 @@ This project is organized in the following way:
 * `3.1-census_poverty_data.ipynb`: extracts data poverty rates by race from the 2020 Census by census tract.
 * `3.2-unemployment-rate-data.ipynb`: extracts data of the unemployment rate from the 2020 Census by census block.
 * `3.3-mental_health_data.ipynb`: extracts data of depression rates by census block from the Center for Disease Control.
-* `4-web-scrapping-and-data-collection.ipynb`: extracts data of 1,000 non-profit organizations listed in [idealist.org](https://www.idealist.org/en/organizations?q=)
+* `3.4-exploratory_data_analysis.ipynb`: produces EDA of Census CRE equity supplement and CDC data on depression rates
+* `create_data_file.py`: generates a data set of community needs including poverty levels, depression rates, percent of the population that is uninsured and more by census tract in Washington, DC, and Prince George's County.
+* `3.5-needs-score.ipynb:` ingests the data from notebook 3.4 and computes z-scores of all community needs attributes to create a composite `Needs Score`; exports the data used to visualize the needs score and other data.
+* `4.1-web-scrapping-and-data-collection.ipynb`: extracts data of 1,000 non-profit organizations listed in [idealist.org](https://www.idealist.org/en/organizations?q=)
+* `4.2-non_profit_orgs_data_cleaning_and_analysis.ipynb & 4.3-web-scrapped-data-plotting.ipynb`: clean the data extracted in script 4.1 for display in an online dashboard.
+* `5-non-profit-orgs-map`: generates online dashboard using data generated from script 3.5.
 
-This project is expected to benefit SWT in mainly four ways:
+## Data:
 
-* Computing counts of participants served to understand the characteristics of program participants
-* Providing recommendations to continue strengthening data collection and identify outcome measures
-* Creating a weighted measure to assess the needs of underserved communities in the Washington, DC, metropolitan area in terms of poverty, mental health, unemployment, wealth disparities and more. This measure will be created at the census block level and plotted on a map to visualize the areas of the region in need of SWT services and presence.
-* Identifying the areas of the region with the most and least service providers for the types of services SWT provides.
+* Community Resilience Estimates Equity Supplement:
+* CDC Depression rates:
+* idealist.org: contains information on non-profit organizations' profiles including characteristics such as name, address, and service areas
 
-This information will allow SWT to expand its services where they are needed most.
+## Analysis of administrative data:
 
-## Preliminary results:
+## StartingWithToday Community Needs and Resources Dashboard
 
-Between 2014 and 2021, most workshops have been career-related, followed by economic-related topics. The least frequent topic type was health/wellness.
+The DataKind team developed a dashboard to identify service providers offering mental health and economic development services in the District of Columbia and nearby areas. Data from the U.S. [Census Community Resilience Estimates Equity Supplement](https://www.census.gov/programs-surveys/community-resilience-estimates/data/supplement.html) was used to create a composite needs score to identify census tracts in Washington, DC, and Prince George’s County with the greatest need for services offered by StartingWithToday.
 
-<p align="center">
-  <img src="visualizations/attendees_per_cat_aggregated.png" height="600" width="800"></img>
-</p>
+### Community resources
 
-The number of workshop participants ranged between over 40 in 2014 to slightly below 20 in 2019, although it increased again to 30 in 2020.
+Using data from [idealist.org](https://www.idealist.org/en/organizations?q=), BeautifulSoup and Selenium libraries were used non-profit organizations’ key information such as name, service or issue areas of work, address, etc. The [Google Maps API](https://developers.google.com/maps) was used to access the coordinates of each organization's address and produce the map in the left photo below. The user can select service areas and the map will locate organizations that provide services in that particular area. The horizontal bar chart on the left displays the number of non-profit organizations in the idealist.org directory by service type in Washington, DC, less organizations based in Wards 7 and 8, and the number of organizations in Wards 7 and 8, a geographical area of priority for StartingWithToday.
 
-<p align="center">
-  <img src="visualizations/attendees_per_year.png" height="600" width="800"></img>
-</p>
+![dash-1](./visualizations/dash-1.png)
 
-On average, the number of career-related topics has decreased over time. Economic-related topics appeared to not have been offered in 2019 but had slightly more than 10 participants in 2020.
+![dash-2](./visualizations/dash-2.png)
 
-<p align="center">
-  <img src="visualizations/attendees_by_wkshp_cat.png" height="600" width="800"></img>
-</p>
+To update the map, run scripts 4.1 and 4.2 in the main branch of this project’s repo. To run it, please make sure there is an up to date chromedriver file in your machine and that you have an API key for the Google Maps API. The files generated through this script are currently saved in AWS S3 objects [here](https://docs.google.com/spreadsheets/d/1F0isvtoLjkbqA6tih8RMfcfXdOJ035EVWBRF65fhGaA/edit#gid=0).
 
-Most participants across all years were female, but the number of male participants has increased slightly between 2019 and 2020.
+### Community needs
+This score is composed of the following features:
+* Percent of the population with income below the poverty line
+* Depression rate
+* Percent of the population without health insurance
+* Gini inequality index
+* Percentage of households without vehicle access
+* Percentage of the population without internet access
+* Percentage of the population with a high school degree
+* Walkability score
 
-<p align="center">
-  <img src="visualizations/attendees_by_gender.png" height="600" width="800"></img>
-</p>
+Each of these features is assigned a weight from 0% to 100% for a total composite weight of 100% among all factors. The data generated by script [create_data_file.py](https://github.com/DataKind-DC/StartingWithToday/blob/main/create_data_file.py) is ingested by script 3.5 to generate z-scores of each of these factors to standardize the data prior to creating the weighted composite score. In the dashboard, the user can modify the weights of each factor with the expectation that all weights should add up to 1. A choropleth map of the needs score is plotted next, highlighting in a darker color the census tracts with the greater need as defined by the weights assigned by the user. The map that follows provides the detail of each individual feature prior to data standardization for additional context.
 
-Several age ranges were represented in the data. Between 2016 and 2020, most participants were 29 or younger.
+![dash-3](./visualizations/dash-3.png)
 
-<p align="center">
-  <img src="visualizations/attendees_by_age.png" height="600" width="800"></img>
-</p>
+![dash-4](./visualizations/dash-4.png)
+
+This dashboard is generated through Python script 5-non-profit-orgs-map.py and is deployed to Heroku [here](https://starting-with-today-dashboard.herokuapp.com/). The code used to maintain the app is found in [this](https://git.heroku.com/starting-with-today-dashboard.git) separate Heroku GitHub repository.
+
+## Data highlights from Census CRE Equity Supplement
+
+### References:
+
+* [Dash tutorial](https://dash.plotly.com/installation)
+* [Deploying Dash apps](https://dash.plotly.com/deployment)
+* [Community Resilience Equity Estimates Supplement](https://www.census.gov/programs-surveys/community-resilience-estimates/data/supplement.html)
+* [GIS GEOJSON Census Tracts](https://github.com/arcee123/GIS_GEOJSON_CENSUS_TRACTS)
+* [Adding local image to Dash app](https://community.plotly.com/t/adding-local-image/4896)
+* [Combining choropleth map and scatter layer](https://community.plotly.com/t/how-can-i-combine-choropleth-and-scatter-layer-in-a-plotly-map/29842/6)
