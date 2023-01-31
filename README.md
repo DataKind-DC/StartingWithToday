@@ -42,7 +42,7 @@ The DataKind team developed a dashboard to identify service providers offering m
 
 Using data from [idealist.org](https://www.idealist.org/en/organizations?q=), BeautifulSoup and Selenium libraries were used non-profit organizations’ key information such as name, service or issue areas of work, address, etc. The [Google Maps API](https://developers.google.com/maps) was used to access the coordinates of each organization's address and produce the map in the left photo below. The user can select service areas and the map will locate organizations that provide services in that particular area. The horizontal bar chart on the left displays the number of non-profit organizations in the idealist.org directory by service type in Washington, DC, less organizations based in Wards 7 and 8, and the number of organizations in Wards 7 and 8, a geographical area of priority for StartingWithToday.
 
-![dash-1](./visualizations/dash-1.png)
+![dash--1](./visualizations/dash--1.png)
 
 ![dash-2](./visualizations/dash-2.png)
 
