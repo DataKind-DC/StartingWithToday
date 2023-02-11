@@ -95,7 +95,7 @@ This dashboard is generated through Python script 5-non-profit-orgs-map.py and i
 
 ## SWT Internal Data:
 
-Some basic analysis has been performed on attendance and viewership data for various workshops, community talks, and online events organized by Starting With Today. To create a clean, consolidated .csv file out of these attendance spreadsheets, run script 2.1 in R. It will create an output file called swt_alldata.csv from the various raw spreadsheets, as well as generate a series of summary tables and plots. 
+Initial exploratory analysis has been performed on attendance and viewership data for various workshops, community talks, and online events run by Starting With Today. To create a clean, consolidated .csv file out of these attendance spreadsheets, run script 2.1 in R. It will create an output file called swt_alldata.csv from the various raw spreadsheets, as well as generate a series of summary tables and plots. 
 
 We highlight the following plot of workshop attendance data, based on anonymized sign-in sheets:
 
