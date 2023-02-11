@@ -103,10 +103,10 @@ We highlight the following plot of workshop attendance data, based on anonymized
   <img src="visualizations/attendees_by_age.png" height="600" width="800"></img>
 </p>
 
-Here we can how SWT's operations adapted for the pandemic in 2020. Community events continued online, and other events were moved to various streaming formats.
+We can also see how SWT's operations adapted for the pandemic in 2020. Community events continued online, and other events were moved to various streaming formats.
 
 <p align="center">
-  <img src="visualizations/Number of Attendees at SWT Online and Community Events, 2018-2021.png" height="600" width="1200"></img>
+  <img src="visualizations/Number of Attendees at SWT Online and Community Events, 2018-2021.png" height="400" width="1000"></img>
 </p>
 
 
